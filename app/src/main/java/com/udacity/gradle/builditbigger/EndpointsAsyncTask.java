@@ -15,11 +15,14 @@ import com.udacity.gradle.builditbigger.backend.myApi.MyApi;
 import java.io.IOException;
 
 public class EndpointsAsyncTask extends AsyncTask<Pair<Context, String>, Void, String> {
+
     private MyApi myApiService = null;
+    private OnTaskCompleted taskCompleted;
     private Context context;
 
-    public EndpointsAsyncTask(Context context) {
+    public EndpointsAsyncTask(Context context, OnTaskCompleted taskCompleted) {
         this.context = context;
+        this.taskCompleted = taskCompleted;
     }
 
     @Override
@@ -56,8 +59,6 @@ public class EndpointsAsyncTask extends AsyncTask<Pair<Context, String>, Void, S
     protected void onPostExecute(String result) {
 //            Toast.makeText(context, result, Toast.LENGTH_LONG).show();
         //Start Android Library
-        Intent intent = new Intent(context, DisplayJoke.class);
-        intent.putExtra("JOKE_KEY", result);
-        context.startActivity(intent);
+        taskCompleted.onTaskCompleted(result);
     }
 }
